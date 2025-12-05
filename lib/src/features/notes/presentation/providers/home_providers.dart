@@ -3,7 +3,7 @@ import 'package:notes_app/src/core/database/app_database.dart';
 import 'package:notes_app/src/features/notes/data/notes_repository.dart';
 
 // 1. Holds the ID of the folder we are currently viewing (null = Root)
-final currentFolderIdProvider = StateProvider<int?>((ref) => null);
+final currentFolderIdProvider = Provider<int?>((ref) => null);
 
 // 2. Fetches the SUB-FOLDERS for the current view
 final currentFoldersStreamProvider = StreamProvider.autoDispose<List<Folder>>((ref) {
