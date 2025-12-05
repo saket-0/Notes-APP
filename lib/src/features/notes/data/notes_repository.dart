@@ -1,13 +1,11 @@
 import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/database/app_database.dart';
+import 'package:notes_app/src/core/database/app_database.dart';
 
-// This provider gives other files access to this Repository
 final notesRepositoryProvider = Provider<NotesRepository>((ref) {
   return NotesRepository(ref.watch(databaseProvider));
 });
 
-// We expose the database itself via a provider for easy access
 final databaseProvider = Provider<AppDatabase>((ref) {
   return AppDatabase();
 });
@@ -17,9 +15,6 @@ class NotesRepository {
 
   NotesRepository(this._db);
 
-  // --- Folder Operations ---
-
-  // Get folders inside a specific parent (or root if null)
   Stream<List<Folder>> watchFolders({int? parentId}) {
     return (_db.select(_db.folders)
           ..where((f) => parentId == null
@@ -36,9 +31,6 @@ class NotesRepository {
         ));
   }
 
-  // --- Note Operations ---
-
-  // Get notes inside a specific folder (or root if null)
   Stream<List<Note>> watchNotes({int? folderId}) {
     return (_db.select(_db.notes)
           ..where((n) => folderId == null

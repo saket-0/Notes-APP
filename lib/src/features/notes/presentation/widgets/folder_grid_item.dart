@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../core/database/app_database.dart';
+import 'package:notes_app/src/core/database/app_database.dart';
 
 class FolderGridItem extends StatelessWidget {
   final Folder folder;

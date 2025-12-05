@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'providers/home_providers.dart';
-import 'widgets/folder_grid_item.dart';
-import 'widgets/note_grid_item.dart';
-import '../../data/notes_repository.dart';
+import 'package:notes_app/src/features/notes/data/notes_repository.dart';
+import 'package:notes_app/src/features/notes/presentation/providers/home_providers.dart';
+import 'package:notes_app/src/features/notes/presentation/widgets/folder_grid_item.dart';
+import 'package:notes_app/src/features/notes/presentation/widgets/note_grid_item.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
