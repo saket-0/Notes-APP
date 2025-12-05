@@ -13,6 +13,10 @@ dependencies:
     sdk: flutter
   intl: any
 
+  image_picker: ^1.0.7
+  uuid: ^4.3.3
+  # path_provider and flutter_quill are already there, which is good.
+
   # --- Database & Storage ---
   drift: ^2.20.0
   sqlite3_flutter_libs: ^0.5.24
@@ -21,8 +25,8 @@ dependencies:
   path: ^1.9.0
 
   # --- State Management ---
-  flutter_riverpod: ^2.5.1
-  riverpod_annotation: ^2.3.5
+  flutter_riverpod: ^3.0.3
+  riverpod_annotation: ^3.0.3
 
   # --- UI & Features ---
   google_fonts: ^6.2.1
@@ -33,12 +37,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^6.0.0
   build_runner: ^2.4.9
   drift_dev: ^2.20.0
-  riverpod_generator: ^2.4.0
-  custom_lint: ^0.6.4
-  riverpod_lint: ^2.3.10
+  riverpod_generator: ^3.0.3
+  custom_lint: ^0.8.1
+  riverpod_lint: ^3.0.3
 
 flutter:
   uses-material-design: true

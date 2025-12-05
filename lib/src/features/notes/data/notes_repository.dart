@@ -29,10 +29,13 @@ class NotesRepository {
     return _db.into(_db.folders).insert(FoldersCompanion(
           name: Value(name),
           parentId: Value(parentId),
-          // FIX: Explicitly set date in Dart so it stores as Int (timestamp)
           createdAt: Value(DateTime.now()),
           isFavorite: const Value(false),
         ));
+  }
+
+  Future<int> deleteFolder(int id) {
+    return (_db.delete(_db.folders)..where((f) => f.id.equals(id))).go();
   }
 
   // --- Note Operations ---
@@ -46,15 +49,26 @@ class NotesRepository {
         .watch();
   }
 
+  Future<Note?> getNote(int id) {
+     return (_db.select(_db.notes)..where((n) => n.id.equals(id))).getSingleOrNull();
+  }
+
   Future<int> createNote(String title, String contentJson, {int? folderId}) {
     return _db.into(_db.notes).insert(NotesCompanion(
           title: Value(title),
           contentJson: Value(contentJson),
           folderId: Value(folderId),
-          // FIX: Explicitly set dates in Dart so they store as Int (timestamp)
           createdAt: Value(DateTime.now()),
           updatedAt: Value(DateTime.now()),
           isPinned: const Value(false),
         ));
+  }
+
+  Future<bool> updateNote(Note note) {
+    return _db.update(_db.notes).replace(note);
+  }
+
+  Future<int> deleteNote(int id) {
+    return (_db.delete(_db.notes)..where((n) => n.id.equals(id))).go();
   }
 }

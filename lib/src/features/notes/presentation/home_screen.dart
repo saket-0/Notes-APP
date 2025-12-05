@@ -5,9 +5,38 @@ import 'package:notes_app/src/features/notes/data/notes_repository.dart';
 import 'package:notes_app/src/features/notes/presentation/providers/home_providers.dart';
 import 'package:notes_app/src/features/notes/presentation/widgets/folder_grid_item.dart';
 import 'package:notes_app/src/features/notes/presentation/widgets/note_grid_item.dart';
+import 'package:notes_app/src/features/notes/presentation/note_editor_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
+
+  void _showCreateFolderDialog(BuildContext context, WidgetRef ref) {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("New Folder"),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: "Folder Name"),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+          TextButton(
+            onPressed: () {
+              if (controller.text.isNotEmpty) {
+                final currentId = ref.read(currentFolderIdProvider);
+                ref.read(notesRepositoryProvider).createFolder(controller.text, parentId: currentId);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text("Create"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +102,13 @@ class HomeScreen extends ConsumerWidget {
                   return NoteGridItem(
                     note: note,
                     onTap: () {
-                      // TODO: Open Note Editor
+                      // Open Note Editor
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => NoteEditorScreen(noteId: note.id),
+                        ),
+                      );
                     },
                   );
                 },
@@ -84,19 +119,32 @@ class HomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      // Temporary FAB to test adding data
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Temporary Logic: Create a dummy note to test the UI
-          final repo = ref.read(notesRepositoryProvider);
-          final currentId = ref.read(currentFolderIdProvider);
-          repo.createNote(
-            "New Note ${DateTime.now().second}",
-            "Some content",
-            folderId: currentId,
-          );
-        },
-        child: const Icon(Icons.add),
+      // Floating Action Buttons for Note and Folder creation
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton.small(
+            heroTag: "folder_btn",
+            onPressed: () => _showCreateFolderDialog(context, ref),
+            child: const Icon(Icons.create_new_folder),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: "note_btn",
+            onPressed: () {
+              final currentId = ref.read(currentFolderIdProvider);
+              // Open Editor for new note
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => NoteEditorScreen(currentFolderId: currentId),
+                ),
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
