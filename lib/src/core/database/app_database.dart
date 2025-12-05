@@ -32,7 +32,9 @@ LazyDatabase _openConnection() {
     }
 
     final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'notes_master.sqlite'));
+    // final file = File(p.join(dbFolder.path, 'notes_master.sqlite'));
+    // CHANGE THIS LINE: "notes_master.sqlite" -> "notes_master_v2.sqlite"
+    final file = File(p.join(dbFolder.path, 'notes_master_v2.sqlite'));
 
     return NativeDatabase.createInBackground(file);
   });

@@ -15,6 +15,7 @@ class NotesRepository {
 
   NotesRepository(this._db);
 
+  // --- Folder Operations ---
   Stream<List<Folder>> watchFolders({int? parentId}) {
     return (_db.select(_db.folders)
           ..where((f) => parentId == null
@@ -28,9 +29,13 @@ class NotesRepository {
     return _db.into(_db.folders).insert(FoldersCompanion(
           name: Value(name),
           parentId: Value(parentId),
+          // FIX: Explicitly set date in Dart so it stores as Int (timestamp)
+          createdAt: Value(DateTime.now()),
+          isFavorite: const Value(false),
         ));
   }
 
+  // --- Note Operations ---
   Stream<List<Note>> watchNotes({int? folderId}) {
     return (_db.select(_db.notes)
           ..where((n) => folderId == null
@@ -46,6 +51,10 @@ class NotesRepository {
           title: Value(title),
           contentJson: Value(contentJson),
           folderId: Value(folderId),
+          // FIX: Explicitly set dates in Dart so they store as Int (timestamp)
+          createdAt: Value(DateTime.now()),
+          updatedAt: Value(DateTime.now()),
+          isPinned: const Value(false),
         ));
   }
 }
