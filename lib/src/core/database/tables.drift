@@ -1,0 +1,31 @@
+-- 1. The Folders Table (Hierarchy)
+CREATE TABLE folders (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    -- Self-referencing parent_id allows folders inside folders
+    parent_id INT REFERENCES folders(id) ON DELETE CASCADE, 
+    color INT NOT NULL DEFAULT 4294967295, -- Default White
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_favorite BOOLEAN NOT NULL DEFAULT 0
+);
+
+-- 2. The Notes Table (Data)
+CREATE TABLE notes (
+    id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- If a folder is deleted, set the note's folder to NULL (move to "Random Assets")
+    folder_id INT REFERENCES folders(id) ON DELETE SET NULL, 
+    title TEXT,
+    content_json TEXT, -- We store the fancy text/images as a JSON string
+    is_pinned BOOLEAN NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. The Search Engine (Virtual Table)
+-- This creates a hidden index that makes searching 100x faster
+CREATE VIRTUAL TABLE notes_search USING fts5(
+    title,
+    content_json,
+    content=notes,
+    content_rowid=id
+);
